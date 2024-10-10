@@ -15,7 +15,9 @@ app.use(express.json())
 app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec))
 
 app.use(cors())
+
 app.use('/owners', require('./routes/owner'))
 app.use('/pets', require('./routes/pets'))
+app.use('/api/' ,require('./routes/login'))
 
 app.listen(PORT, ()=> console.log(`Server Ready At Port = ${PORT}`))

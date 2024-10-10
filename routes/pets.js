@@ -1,5 +1,5 @@
 const router = require('express').Router()
-
+const verifyToken = require('../drivers/authMiddleware');
 const {findAll, findById, save, deleteById, update} = require('../controllers/controller-pet')
 
 //EndPoints
@@ -78,7 +78,7 @@ router.get('/:id', findById)
  *       500:
  *         description: Error en el servidor.
  */
-router.post('/', save)
+router.post('/', verifyToken,save)
 
 /**
  * @swagger
@@ -101,7 +101,7 @@ router.post('/', save)
  *       500:
  *         description: Error en el servidor.
  */
-router.delete('/:id', deleteById)
+router.delete('/:id',verifyToken, deleteById)
 
 /**
  * @swagger
@@ -130,6 +130,6 @@ router.delete('/:id', deleteById)
  *       500:
  *         description: Error en el servidor.
  */
-router.put('/:id', update)
+router.put('/:id',verifyToken, update)
 
 module.exports = router
