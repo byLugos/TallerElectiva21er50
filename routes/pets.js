@@ -78,7 +78,7 @@ router.get('/:id', findById)
  *       500:
  *         description: Error en el servidor.
  */
-router.post('/:id', save)
+router.post('/', save)
 
 /**
  * @swagger

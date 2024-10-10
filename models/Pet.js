@@ -3,11 +3,6 @@ const mongoose = require('mongoose');
 const {Schema} = mongoose
 
 const schemaPet = new Schema({
-    id: {
-        type: String,
-        required : true,
-        unique: true
-    },
     name: {
         type: String,
         required: true
@@ -24,10 +19,6 @@ const schemaPet = new Schema({
         type: Date,
         required: true
     },
-    owner: {
-        type: Schema.Types.ObjectId,
-        ref: 'owner'
-    }
 })
 
 module.exports = mongoose.model('pet', schemaPet)

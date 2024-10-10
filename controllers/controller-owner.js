@@ -1,5 +1,5 @@
 const Owner = require('../models/Owner')
-
+const Pet = require('../models/Pet')
 module.exports = {
     'findAll' : async (req, res) => {
         try{
@@ -22,12 +22,21 @@ module.exports = {
         }
     },
     'save': async (req, res) => {
-        const owner = new Owner(req.body)
-        try{
-            const result = await owner.save()
-            return res.status(200).json({state: 'Success', data: result})
-        }catch(err){
-            return res.status(500).json({state:'Error', data: err})
+        try {
+            const { pets, ...ownerData } = req.body;
+            if (!pets || pets.length === 0) {
+                return res.status(400).json({ state: false, message: 'El dueño debe tener al menos una mascota' });
+            }
+            const owner = new Owner(ownerData);
+            const foundPets = await Pet.find({ _id: { $in: pets } });
+            if (foundPets.length !== pets.length) {
+                return res.status(404).json({ state: false, message: 'Algunas mascotas no se encontraron' });
+            }
+            owner.pets = foundPets.map(pet => pet._id);  
+            const result = await owner.save();
+            return res.status(201).json({ state: true, data: result });
+        } catch (err) {
+            return res.status(500).json({ state: false, data: err.message });
         }
     },
     'deleteById': async (req, res) => {
