@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const verifyToken = require('../drivers/authMiddleware');
-const {findAll, findById, save, deleteById, update} = require('../controllers/controller-pet')
+const {findAll, findById, save, deleteById, update} = require('../controllers/controllerPet')
 
 //EndPoints
 
@@ -22,7 +22,7 @@ const {findAll, findById, save, deleteById, update} = require('../controllers/co
  *       500:
  *         description: Error en el servidor
  */
-router.get('/', findAll)
+router.get('/',verifyToken, findAll)
 
 /**
  * @swagger
@@ -49,7 +49,7 @@ router.get('/', findAll)
  *       500:
  *         description: Error en el servidor.
  */
-router.get('/:id', findById)
+router.get('/:id', verifyToken,findById)
 
 /**
  * @swagger

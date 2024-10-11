@@ -1,18 +1,30 @@
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs'); 
+const User = require('../models/User'); 
 const authController = {
-    login: (req, res) => {
-        const { id, name } = req.body;
-        if (id == process.env.ID && name == process.env.USER) {
-            const user = { id, name }; 
-            const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '1h' });
+    login: async (req, res) => {
+        const { email, password } = req.body;
+        try {
+            const user = await User.findOne({ email: email });
+            if (!user) {
+                return res.status(401).json({ message: 'Credenciales inválidas' });
+            }
+            const isMatch = await bcrypt.compare(password, user.password);
+            if (!isMatch) {
+                return res.status(401).json({ message: 'Credenciales inválidas' });
+            }
+            const token = jwt.sign(
+                { email: user.email, role: user.role },
+                process.env.JWT_SECRET,
+                { expiresIn: '1h' }
+            );
             return res.json({
                 message: 'Autenticado correctamente',
                 token: token
             });
-        } else {
-            return res.status(401).json({
-                message: 'Credenciales inválidas'
-            });
+
+        } catch (err) {
+            return res.status(500).json({ message: 'Error en el servidor', error: err.message });
         }
     }
 };
