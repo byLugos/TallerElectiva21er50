@@ -62,5 +62,24 @@ module.exports = {
         } catch (err) {
             return res.status(500).json({ state: 'Error', data: err.message });
         }
+    },
+    'addAppointment': async (req, res) => {
+        const { petId } = req.params; // ID de la mascota
+        const { appointmentId } = req.body; // ID de la cita
+
+        try {
+            const pet = await Pet.findById(petId);
+            if (!pet) {
+                return res.status(404).json({ state: false, message: 'Mascota no encontrada.' });
+            }
+
+            pet.appointments.push(appointmentId);
+
+            const updatedPet = await pet.save();
+
+            return res.status(200).json({ state: true, data: updatedPet });
+        } catch (err) {
+            return res.status(500).json({ state: false, data: err.message });
+        }
     }
 };

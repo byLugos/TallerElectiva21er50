@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const verifyToken = require('../drivers/authMiddleware');
-const {findAll, findById, save, deleteById, update} = require('../controllers/controllerPet')
+const {findAll, findById, save, deleteById, update, addAppointment} = require('../controllers/controllerPet')
 
 //EndPoints
 
@@ -357,5 +357,7 @@ router.delete('/:id',verifyToken, deleteById)
  *               example: "Error en el servidor."
  */
 router.put('/:id',verifyToken, update)
+
+router.post('/:petId/appointments', verifyToken, addAppointment);
 
 module.exports = router

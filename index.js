@@ -19,5 +19,6 @@ app.use(cors())
 app.use('/owners', require('./routes/owner'))
 app.use('/pets', require('./routes/pets'))
 app.use('/api/' ,require('./routes/login'))
+app.use('/appointments',require('./routes/appointment'))
 
 app.listen(PORT, ()=> console.log(`Server Ready At Port = ${PORT}`))

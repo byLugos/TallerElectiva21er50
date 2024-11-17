@@ -19,6 +19,12 @@ const schemaPet = new Schema({
         type: Date,
         required: true
     },
+    appointments: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'appointment',
+        },
+    ],
 })
 
 module.exports = mongoose.model('pet', schemaPet)
