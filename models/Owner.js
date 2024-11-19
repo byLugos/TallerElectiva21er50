@@ -11,7 +11,7 @@ const schemaOwner = new Schema({
         required: true
     },
     phone: {
-        type: Number,
+        type: String,
         required: true
     },
     email: {
@@ -20,7 +20,7 @@ const schemaOwner = new Schema({
     },
     pets: [
         {
-            type: Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'pet'
         }
     ]
