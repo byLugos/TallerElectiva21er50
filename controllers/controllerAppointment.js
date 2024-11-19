@@ -3,7 +3,7 @@ const Appointment = require('../models/Appointment');
 module.exports = {
     findAll: async (req, res) => {
         try {
-            const appointments = await Appointment.find({});
+            const appointments = await Appointment.find({}).populate('pet_id');
             res.status(200).json({ state: 'Success', data: appointments });
         } catch (err) {
             res.status(500).json({ state: 'Error', message: err.message });
@@ -12,7 +12,7 @@ module.exports = {
     findById: async (req, res) => {
         const { id } = req.params;
         try {
-            const appointment = await Appointment.findById(id);
+            const appointment = await Appointment.findById(id).populate('pet_id');
             if (appointment) {
                 res.status(200).json({ state: 'Success', data: appointment });
             } else {
@@ -26,12 +26,17 @@ module.exports = {
         const { pet_id, date_time, reason, status, notes } = req.body;
         try {
             const newAppointment = new Appointment({ pet_id, date_time, reason, status, notes });
+    
             const savedAppointment = await newAppointment.save();
-            res.status(201).json({ state: 'Success', data: savedAppointment });
+
+            const populatedAppointment = await Appointment.findById(savedAppointment._id).populate('pet_id');
+    
+            res.status(201).json({ state: 'Success', data: populatedAppointment });
         } catch (err) {
             res.status(500).json({ state: 'Error', message: err.message });
         }
     },
+    
     deleteById: async (req, res) => {
         const { id } = req.params;
         try {

@@ -11,7 +11,7 @@ module.exports = {
     'findById': async (req, res) => {
         const { id } = req.params;
         try {
-            const result = await Pet.findById(id);
+            const result = await Pet.findById(id).populate('appointments');
             if (result) {
                 return res.status(200).json({ state: true, data: result });
             }
